@@ -5,6 +5,7 @@ class Card extends Component {
  constructor(props) {
    super(props);
    this.state = {
+	   
    };
  }
   setStateAsync(state) {
@@ -13,12 +14,13 @@ class Card extends Component {
     });
   }
   async componentDidMount() {
-  	const { url } = this.props;
-	const jsdom = require("jsdom");
-	const { JSDOM } = jsdom;
+	const { url } = this.props;
 	const response = await fetch(url);
 	const text = await response.text();
-	const dom = await new JSDOM(text);
+
+	const jsdom = require("jsdom");
+	const { JSDOM } = jsdom;
+	const dom = new JSDOM(text);
 	const title = dom.window.document.querySelector("h1").textContent;
 
 	const ingredientNames = dom.window.document.getElementsByClassName('ingredient-name');

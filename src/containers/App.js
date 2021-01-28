@@ -13,6 +13,12 @@ class App extends Component {
 		}
 	}
 
+	// componentDidMount () {
+	// 	fetch('https://icook.tw/recipes/').then(response=>{
+	// 		console.log(response)
+	// 	})
+	// }
+
 	onSearchChange = (event) => {
 		this.setState({ searchfield: event.target.value })
 	}
