@@ -47,7 +47,6 @@ class Card extends Component {
 				list_ingredientNames.push(ingredientNames[i].firstElementChild.textContent);
 				list_ingredientUnits.push(ingredientUnits[i].textContent);
 				dict_ingredients[ingredientNames[i].firstElementChild.textContent] = ingredientUnits[i].textContent;
-
 			}
 
 			this.setState({ 
@@ -67,14 +66,17 @@ class Card extends Component {
 		const { ingredientNamesComma,title, ingredientName1,ingredientUnit1 } = this.state;
 
 		return (
-			<div className='tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5'>
-				<h2>{title || 'Unknown'}</h2>
-				<p>{ingredientName1}:{ingredientUnit1}</p>
-				<h1>...</h1>
-				<h2 style={{ textTransform: 'uppercase' }}>Ingredients</h2>
-				<p>{ingredientNamesComma}</p>
-				<img alt='recipes' src={`https://robohash.org/${id}?200x200`} />
-			</div>	
+			<div className="tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5"> 
+				<div className="">
+				{/* <div className='tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5'> */}
+					<h2>{title || 'Unknown'}</h2>
+					<p>{ingredientName1}:{ingredientUnit1}</p>
+					<h1>...</h1>
+					<h2 style={{ textTransform: 'uppercase' }}>Ingredients</h2>
+					<p>{ingredientNamesComma}</p>
+					<img alt='recipes' src={`https://robohash.org/${id}?200x200`} />
+				</div>	
+			</div>
 		);
 	}
 }
