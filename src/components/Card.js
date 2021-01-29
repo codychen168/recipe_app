@@ -66,9 +66,8 @@ class Card extends Component {
 		const { ingredientNamesComma,title, ingredientName1,ingredientUnit1 } = this.state;
 
 		return (
-			<div className="tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5"> 
-				<div className="">
-				{/* <div className='tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5'> */}
+				// <div className="zone">
+				<div className='tc bg-light-gray br3 pa3 ma3 grow bw2 shadow-5'>
 					<h2>{title || 'Unknown'}</h2>
 					<p>{ingredientName1}:{ingredientUnit1}</p>
 					<h1>...</h1>
@@ -76,7 +75,6 @@ class Card extends Component {
 					<p>{ingredientNamesComma}</p>
 					<img alt='recipes' src={`https://robohash.org/${id}?200x200`} />
 				</div>	
-			</div>
 		);
 	}
 }

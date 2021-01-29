@@ -3,7 +3,7 @@ import Card from './Card';
 
 const CardList = ({ recipes }) => {
 	return (
-		<div>
+		<div className="container">
 			{
 				recipes.map((recipe, i) => {
 					return	(
