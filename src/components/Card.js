@@ -5,7 +5,13 @@ class Card extends Component {
  constructor(props) {
    super(props);
    this.state = {
-	   
+	title: '',
+	ingredientNames: [],
+	ingredientUnits: [],
+	ingredientNamesComma: [],
+	ingredientName1: '',
+	ingredientUnit1: '',
+	ingredients: {}
    };
  }
   setStateAsync(state) {
@@ -15,60 +21,55 @@ class Card extends Component {
   }
   async componentDidMount() {
 	const { url } = this.props;
-	const response = await fetch(url);
-	const text = await response.text();
 
-	const jsdom = require("jsdom");
-	const { JSDOM } = jsdom;
-	const dom = new JSDOM(text);
-	const title = dom.window.document.querySelector("h1").textContent;
+	fetch(url)
+	.then(response=> response.text())
+	.then(html => {
+		var parser = new DOMParser();
+		var document = parser.parseFromString(html, 'text/html');
+		var title = document.querySelector("h1").textContent;	
+		// console.log('title:\n', title);
+		var ingredientNames = document.getElementsByClassName('ingredient-name');
+		var ingredientUnits = document.getElementsByClassName('ingredient-unit');
+		// console.log("ingredientNames: \n", ingredientNames);
+		// return document
+		var list_ingredientNames = [];
+		var list_ingredientNamesComma = [];
+		var list_ingredientUnits = [];
+		var dict_ingredients = {};
 
-	const ingredientNames = dom.window.document.getElementsByClassName('ingredient-name');
-	const ingredientUnits = dom.window.document.getElementsByClassName('ingredient-unit');
-	const ingredient_0 = ingredientNames[0].firstElementChild.textContent; 
-	const ingredient_1 = ingredientUnits[0].textContent;
-	var list_ingredientNames = [];
-	var list_ingredientNamesComma = [];
-	var list_ingredientUnits = [];
-	var dict_ingredients = {};
-	for (var i = 0; i < ingredientNames.length; i++) {
-		if (i !== ingredientNames.length - 1) {
-    	list_ingredientNamesComma.push(ingredientNames[i].firstElementChild.textContent);
-    	list_ingredientNamesComma.push(', ');
-		} else {
+		for (var i = 0; i < ingredientNames.length; i++) {
+			if (i !== ingredientNames.length - 1) {
 			list_ingredientNamesComma.push(ingredientNames[i].firstElementChild.textContent);
+			list_ingredientNamesComma.push(', ');
+			} else {
+				list_ingredientNamesComma.push(ingredientNames[i].firstElementChild.textContent);
+			}
+			list_ingredientNames.push(ingredientNames[i].firstElementChild.textContent);
+			list_ingredientUnits.push(ingredientUnits[i].textContent);
+			dict_ingredients[ingredientNames[i].firstElementChild.textContent] = ingredientUnits[i].textContent;
+
 		}
-		list_ingredientNames.push(ingredientNames[i].firstElementChild.textContent);
-    	list_ingredientUnits.push(ingredientUnits[i].textContent);
-    	dict_ingredients[ingredientNames[i].firstElementChild.textContent] = ingredientUnits[i].textContent;
 
-	}
-	// console.log({list_ingredientNames, list_ingredientUnits});
-
-	// console.log(dict_ingredients);
-    await this.setStateAsync(
-    	{
-    		recipeName: title,
-    		ingredientName1: ingredient_0,
-    		ingredientUnit1: ingredient_1,
-    		ingredientNames: list_ingredientNames,
-    		ingredientNamesComma: list_ingredientNamesComma,
-    		ingredientUnits: list_ingredientUnits,
-    		ingredients: dict_ingredients
-    	}
-    )
-  }
+		this.setState({ 
+			title: title,
+			ingredientNames: ingredientNames,
+			ingredientUnits: ingredientUnits,
+			ingredientNamesComma: list_ingredientNamesComma,
+			ingredientName1: ingredientNames[0].firstElementChild.textContent,
+			ingredientUnit1: ingredientUnits[0].textContent,
+			ingredients: dict_ingredients
+		});
+	});
+}
   render() {
-  	const { id } = this.props;
-  	const ingredientNamesComma = this.state.ingredientNamesComma;
-  	// const ingredientNames = this.state.ingredientNames;
-  	// const ingredients = this.state.ingredients;
-  	// console.log(ingredientNames);
-  	// console.log(ingredients);
+	const { id } = this.props;
+	const { ingredientNamesComma,title, ingredientName1,ingredientUnit1 } = this.state;
+
     return (
 		<div className='tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5'>
-			<h2>{this.state.recipeName || 'Unknown'}</h2>
-			<p>{this.state.ingredientName1}:{this.state.ingredientUnit1}</p>
+			<h2>{title || 'Unknown'}</h2>
+			<p>{ingredientName1}:{ingredientUnit1}</p>
 			<h1>...</h1>
 			<h2 style={{ textTransform: 'uppercase' }}>Ingredients</h2>
 			<p>{ingredientNamesComma}</p>
@@ -79,19 +80,3 @@ class Card extends Component {
 }
 
 export default Card;
-
-
-// const Card = ({ name, email, id }) => {
-// 	return(
-// 		<div className='tc bg-light-gray dib br3 pa3 ma2 grow bw2 shadow-5'>
-// 			<h1>RoboRecipes</h1>
-// 			<img alt='recipes' src={`https://robohash.org/${id}?200x200`} />
-// 			<div>
-// 				<h2>{name}</h2>
-// 				<p>{email}</p>
-// 			</div>
-// 		</div>	
-// 	);
-// }
-
-// export default Card;
